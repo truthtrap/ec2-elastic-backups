@@ -32,7 +32,7 @@ fi
 vols=("vol-feba5f97" "vol-fcba5f95" "vol-faba5f93" "vol-f8ba5f91")
 mountpoints=("/usr/local/var/lib/couchdb" "/usr/local/var/log/couchdb" "/home/git" "/var/www")
 
-for i in 0 1 2 3
+for ((i = 0; i < ${#vols[@]}; i++))
 do
     xfs_freeze -f ${mountpoints[i]}
     snapshot=($(ec2-create-snapshot ${vols[i]} --region $region))
