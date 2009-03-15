@@ -1,0 +1,10 @@
+(just a very simple readme)
+
+i put together these 2 files because i wanted dirvish like backups, but with snapshots and not too much work. all in all it took me still to much, but thanks to tools like simpledb (http://code.google.com/p/amazon-simpledb-cli/) and the wonderful amazon aws tools i have what i want.
+
+look at the cron example to see how both executables can be called. if you wonder where the verbose strings come from do 'man date' and look for --date.
+
+you need to create your domain: simpledb create-domein snapshot and you need to install simpledb and its required packages. (if you install the amazon perl lib be sure to check the requirements of those packages as well.)
+
+have fun,
+jurg@truthtrap.com
