@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# install http://code.google.com/p/amazon-simpledb-cli/
+# and http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1136
+# WARNING: make sure to install the required packages of the second as well
+
+export JAVA_HOME="location to your java home"
+export EC2_PRIVATE_KEY="location to your private key file"
+export EC2_CERT="location to your certificate"
+export EC2_HOME="location to your ec2 home"
+export AWS_ACCESS_KEY_ID="your aws access key id"
+export AWS_SECRET_ACCESS_KEY="your aws secret access key"
+PATH=$PATH:$HOME/bin:$EC2_HOME/bin 
+
+region="eu-west-1"
+
+# if called with a parameter that is accepted by 'data --date'
+# it creates a date based on that value. if it is empty we take
+# a default expiration of 24 hours
+offset=$1
+if [ "${offset}" == "" ]
+then
+    offset="24 hours"
+fi
+
+expiration=$(date -u --date="${offset}" +"%Y-%m-%d %H:%M:%S")
+if [ "$expiration" == "" ]
+then
+    exit 0
+fi
+
+vols=("vol-feba5f97" "vol-fcba5f95" "vol-faba5f93" "vol-f8ba5f91")
+mountpoints=("/usr/local/var/lib/couchdb" "/usr/local/var/log/couchdb" "/home/git" "/var/www")
+
+for i in 0 1 2 3
+do
+    xfs_freeze -f ${mountpoints[i]}
+    snapshot=($(ec2-create-snapshot ${vols[i]} --region $region))
+    xfs_freeze -u ${mountpoints[i]}
+
+    simpledb put snapshot ${snapshot[1]} expires="${expiration}" description="regular automatic snapshot from ec2-elastic-backups"
+done

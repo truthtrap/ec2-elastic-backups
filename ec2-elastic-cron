@@ -1,0 +1,6 @@
+# m h  dom mon dow   command
+@daily		/root/ec2-elastic-expire > /dev/null 2>&1
+@daily		/root/ec2-elastic-backup "7 days" > /dev/null 2>&1
+@weekly		/root/ec2-elastic-backup "1 month" > /dev/null 2>&1
+@monthly	/root/ec2-elastic-backup "1 year" > /dev/null 2>&1
+0 */3 * * *	/root/ec2-elastic-backup "24 hours" > /dev/null 2>&1
