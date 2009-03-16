@@ -10,7 +10,7 @@ export EC2_CERT="location to your certificate"
 export EC2_HOME="location to your ec2 home"
 export AWS_ACCESS_KEY_ID="your aws access key id"
 export AWS_SECRET_ACCESS_KEY="your aws secret access key"
-PATH=$PATH:$HOME/bin:$EC2_HOME/bin 
+PATH=$PATH:$HOME/bin:$EC2_HOME/bin:/usr/local/bin
 
 region="eu-west-1"
 
