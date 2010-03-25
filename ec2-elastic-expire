@@ -16,10 +16,13 @@ region="eu-west-1"
 
 now=$(date +"%Y-%m-%d %H:%M:%S")
 
-snapshots=$(simpledb query snapshot "['expires' < '${now}']")
+snapshots=$(simpledb select "select * from snapshot where expires < '${now}'")
 
 for snapshot in $snapshots
 do
-    simpledb delete snapshot $snapshot
-    ec2-delete-snapshot $snapshot --region $region
+    snap=`expr match "$snapshot" '.*\(snap-........\).*'`
+    if [ -n "$snap" ]; then
+        simpledb delete snapshot $snap
+        ec2-delete-snapshot $snap --region $region
+    fi
 done
